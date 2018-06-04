@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Character {
+public class CharacterAPI {
 
 
     @SerializedName("id")
@@ -34,11 +34,11 @@ public class Character {
 
     @SerializedName("origin")
     @Expose
-    private Location origin;
+    private LocationAPI origin;
 
     @SerializedName("location")
     @Expose
-    private Location location;
+    private LocationAPI location;
 
     @SerializedName("image")
     @Expose
@@ -60,7 +60,7 @@ public class Character {
      * No args constructor for use in serialization
      * 
      */
-    public Character() {
+    public CharacterAPI() {
     }
 
     /**
@@ -78,7 +78,7 @@ public class Character {
      * @param type
      * @param url
      */
-    public Character(Long id, String name, String status, String species, String type, String gender, Location origin, Location location, String image, List<String> episode, String url, String created) {
+    public CharacterAPI(Long id, String name, String status, String species, String type, String gender, LocationAPI origin, LocationAPI location, String image, List<String> episode, String url, String created) {
         super();
         this.id = id;
         this.name = name;
@@ -142,19 +142,19 @@ public class Character {
         this.gender = gender;
     }
 
-    public Location getOrigin() {
+    public LocationAPI getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Location origin) {
+    public void setOrigin(LocationAPI origin) {
         this.origin = origin;
     }
 
-    public Location getLocation() {
+    public LocationAPI getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationAPI location) {
         this.location = location;
     }
 

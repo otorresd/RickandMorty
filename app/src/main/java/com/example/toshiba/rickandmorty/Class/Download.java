@@ -12,7 +12,7 @@ public class Download {
     private Info info;
     @SerializedName("results")
     @Expose
-    private List<Character> characters;
+    private List<CharacterAPI> characters;
 
     /**
      * No args constructor for use in serialization
@@ -26,7 +26,7 @@ public class Download {
      * @param characters
      * @param info
      */
-    public Download(Info info, List<Character> characters) {
+    public Download(Info info, List<CharacterAPI> characters) {
         super();
         this.info = info;
         this.characters = characters;
@@ -40,11 +40,11 @@ public class Download {
         this.info = info;
     }
 
-    public List<Character> getCharacters() {
+    public List<CharacterAPI> getCharacters() {
         return characters;
     }
 
-    public void setCharacters(List<Character> characters) {
+    public void setCharacters(List<CharacterAPI> characters) {
         this.characters = characters;
     }
 

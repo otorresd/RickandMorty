@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
-public class Location {
+public class LocationAPI {
 
     @SerializedName("name")
     @Expose
@@ -21,7 +21,7 @@ public class Location {
      * No args constructor for use in serialization
      * 
      */
-    public Location() {
+    public LocationAPI() {
     }
 
     /**
@@ -29,7 +29,7 @@ public class Location {
      * @param name
      * @param url
      */
-    public Location(String name, String url) {
+    public LocationAPI(String name, String url) {
         super();
         this.name = name;
         this.url = url;
