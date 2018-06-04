@@ -25,7 +25,6 @@ public class DaoMaster extends AbstractDaoMaster {
         EpisodeDao.createTable(db, ifNotExists);
         JoinCharacterWithEpisodesDao.createTable(db, ifNotExists);
         LocationDao.createTable(db, ifNotExists);
-        OriginDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -34,7 +33,6 @@ public class DaoMaster extends AbstractDaoMaster {
         EpisodeDao.dropTable(db, ifExists);
         JoinCharacterWithEpisodesDao.dropTable(db, ifExists);
         LocationDao.dropTable(db, ifExists);
-        OriginDao.dropTable(db, ifExists);
     }
 
     /**
@@ -57,7 +55,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(EpisodeDao.class);
         registerDaoClass(JoinCharacterWithEpisodesDao.class);
         registerDaoClass(LocationDao.class);
-        registerDaoClass(OriginDao.class);
     }
 
     public DaoSession newSession() {

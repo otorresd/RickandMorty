@@ -6,12 +6,10 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
-import org.greenrobot.greendao.annotation.ToOne;
 
 import java.util.List;
-import org.greenrobot.greendao.DaoException;
-import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Unique;
+import org.greenrobot.greendao.DaoException;
 
 @Entity
 public class Character {
@@ -29,15 +27,9 @@ public class Character {
 
     private String gender;
 
-    private long originId;
+    private Long originId;
 
-    @ToOne(joinProperty = "originId")
-    private Origin origin;
-
-    private long locationId;
-
-    @ToOne(joinProperty = "locationId")
-    private Location location;
+    private Long locationId;
 
     private String image;
 
@@ -62,12 +54,6 @@ public class Character {
     @Generated(hash = 898307126)
     private transient CharacterDao myDao;
 
-    @Generated(hash = 1207152639)
-    private transient Long origin__resolvedKey;
-
-    @Generated(hash = 1068795426)
-    private transient Long location__resolvedKey;
-
     /**
      * No args constructor for use in serialization
      *
@@ -75,39 +61,8 @@ public class Character {
     public Character() {
     }
 
-    /**
-     *
-     * @param id
-     * @param episode
-     * @param species
-     * @param created
-     * @param location
-     * @param status
-     * @param name
-     * @param origin
-     * @param image
-     * @param gender
-     * @param type
-     * @param url
-     */
-    public Character(Long id, String name, String status, String species, String type, String gender, Origin origin, Location location, String image, List<Episode> episode, String url, String created) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.status = status;
-        this.species = species;
-        this.type = type;
-        this.gender = gender;
-        this.origin = origin;
-        this.location = location;
-        this.image = image;
-        this.episode = episode;
-        this.url = url;
-        this.created = created;
-    }
-
-    @Generated(hash = 284728545)
-    public Character(Long id, String name, String status, String species, String type, String gender, long originId, long locationId, String image, String url, String created) {
+    @Generated(hash = 258489728)
+    public Character(Long id, String name, String status, String species, String type, String gender, Long originId, Long locationId, String image, String url, String created) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -169,98 +124,12 @@ public class Character {
         this.gender = gender;
     }
 
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1381079393)
-    public Origin getOrigin() {
-        long __key = this.originId;
-        if (origin__resolvedKey == null || !origin__resolvedKey.equals(__key)) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            OriginDao targetDao = daoSession.getOriginDao();
-            Origin originNew = targetDao.load(__key);
-            synchronized (this) {
-                origin = originNew;
-                origin__resolvedKey = __key;
-            }
-        }
-        return origin;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 967553348)
-    public void setOrigin(@NotNull Origin origin) {
-        if (origin == null) {
-            throw new DaoException("To-one property 'originId' has not-null constraint; cannot set to-one to null");
-        }
-        synchronized (this) {
-            this.origin = origin;
-            originId = origin.getId();
-            origin__resolvedKey = originId;
-        }
-    }
-
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 469564222)
-    public Location getLocation() {
-        long __key = this.locationId;
-        if (location__resolvedKey == null || !location__resolvedKey.equals(__key)) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            LocationDao targetDao = daoSession.getLocationDao();
-            Location locationNew = targetDao.load(__key);
-            synchronized (this) {
-                location = locationNew;
-                location__resolvedKey = __key;
-            }
-        }
-        return location;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1500142957)
-    public void setLocation(@NotNull Location location) {
-        if (location == null) {
-            throw new DaoException("To-one property 'locationId' has not-null constraint; cannot set to-one to null");
-        }
-        synchronized (this) {
-            this.location = location;
-            locationId = location.getLocationId();
-            location__resolvedKey = locationId;
-        }
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 38376985)
-    public List<Episode> getEpisode() {
-        if (episode == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            EpisodeDao targetDao = daoSession.getEpisodeDao();
-            List<Episode> episodeNew = targetDao._queryCharacter_Episode(id);
-            synchronized (this) {
-                if (episode == null) {
-                    episode = episodeNew;
-                }
-            }
-        }
-        return episode;
     }
 
     public String getUrl() {
@@ -293,6 +162,36 @@ public class Character {
 
     public void setLocationId(long locationId) {
         this.locationId = locationId;
+    }
+
+    public void setOriginId(Long originId) {
+        this.originId = originId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 38376985)
+    public List<Episode> getEpisode() {
+        if (episode == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            EpisodeDao targetDao = daoSession.getEpisodeDao();
+            List<Episode> episodeNew = targetDao._queryCharacter_Episode(id);
+            synchronized (this) {
+                if (episode == null) {
+                    episode = episodeNew;
+                }
+            }
+        }
+        return episode;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
