@@ -10,9 +10,9 @@ public class Download {
     @SerializedName("info")
     @Expose
     private Info info;
-    @SerializedName("characters")
+    @SerializedName("results")
     @Expose
-    private List<Character> characters = null;
+    private List<Character> characters;
 
     /**
      * No args constructor for use in serialization

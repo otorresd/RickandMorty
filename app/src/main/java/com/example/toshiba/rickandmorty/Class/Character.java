@@ -7,39 +7,51 @@ import com.google.gson.annotations.SerializedName;
 
 public class Character {
 
+
     @SerializedName("id")
     @Expose
     private Long id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("status")
     @Expose
     private String status;
+
     @SerializedName("species")
     @Expose
     private String species;
+
     @SerializedName("type")
     @Expose
     private String type;
+
     @SerializedName("gender")
     @Expose
     private String gender;
+
     @SerializedName("origin")
     @Expose
-    private Origin origin;
+    private Location origin;
+
     @SerializedName("location")
     @Expose
     private Location location;
+
     @SerializedName("image")
     @Expose
     private String image;
+
     @SerializedName("episode")
     @Expose
     private List<String> episode = null;
+
     @SerializedName("url")
     @Expose
     private String url;
+
     @SerializedName("created")
     @Expose
     private String created;
@@ -66,7 +78,7 @@ public class Character {
      * @param type
      * @param url
      */
-    public Character(Long id, String name, String status, String species, String type, String gender, Origin origin, Location location, String image, List<String> episode, String url, String created) {
+    public Character(Long id, String name, String status, String species, String type, String gender, Location origin, Location location, String image, List<String> episode, String url, String created) {
         super();
         this.id = id;
         this.name = name;
@@ -130,11 +142,11 @@ public class Character {
         this.gender = gender;
     }
 
-    public Origin getOrigin() {
+    public Location getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Origin origin) {
+    public void setOrigin(Location origin) {
         this.origin = origin;
     }
 

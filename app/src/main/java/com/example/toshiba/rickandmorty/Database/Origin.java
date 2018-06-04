@@ -1,21 +1,32 @@
 
-package com.example.toshiba.rickandmorty.Class;
+package com.example.toshiba.rickandmorty.Database;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
+@Entity
 public class Origin {
 
-    @SerializedName("name")
-    @Expose
+    @Id(autoincrement = true)
+    private Long id;
+
     private String name;
-    @SerializedName("url")
-    @Expose
+
+    @Unique
     private String url;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     /**
      * No args constructor for use in serialization
      * 
@@ -30,6 +41,13 @@ public class Origin {
      */
     public Origin(String name, String url) {
         super();
+        this.name = name;
+        this.url = url;
+    }
+
+    @Generated(hash = 949584453)
+    public Origin(Long id, String name, String url) {
+        this.id = id;
         this.name = name;
         this.url = url;
     }

@@ -1,26 +1,31 @@
 
-package com.example.toshiba.rickandmorty.Class;
+package com.example.toshiba.rickandmorty.Database;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
-public class Origin {
+@Entity
+public class Location {
 
-    @SerializedName("name")
-    @Expose
+    @Id(autoincrement = true)
+    private Long locationId;
+
+
     private String name;
-    @SerializedName("url")
-    @Expose
+
+    @Unique
     private String url;
 
     /**
      * No args constructor for use in serialization
      * 
      */
-    public Origin() {
+    public Location() {
     }
 
     /**
@@ -28,10 +33,25 @@ public class Origin {
      * @param name
      * @param url
      */
-    public Origin(String name, String url) {
+    public Location(String name, String url) {
         super();
         this.name = name;
         this.url = url;
+    }
+
+    @Generated(hash = 624263779)
+    public Location(Long locationId, String name, String url) {
+        this.locationId = locationId;
+        this.name = name;
+        this.url = url;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
     }
 
     public String getName() {
