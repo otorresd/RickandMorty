@@ -6,6 +6,7 @@ import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.toshiba.rickandmorty.Class.Download;
+import com.example.toshiba.rickandmorty.Database.Controller;
 import com.example.toshiba.rickandmorty.Interface.RickAndMortyAPI;
 import com.example.toshiba.rickandmorty.R;
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ public class RickAndMortyCallBack implements Callback<Download> {
 
     private String BASE_URL = "https://www.rickandmortyapi.com/";
     private Context context;
+    private Controller controller;
 
     Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -42,6 +44,7 @@ public class RickAndMortyCallBack implements Callback<Download> {
 
     public RickAndMortyCallBack(Context context) {
         this.context = context;
+        controller = new Controller(context);
     }
 
     public void start(){
@@ -70,6 +73,7 @@ public class RickAndMortyCallBack implements Callback<Download> {
     public void onResponse(Call<Download> call, Response<Download> response) {
         if(response.isSuccessful()) {
             download = response.body();
+            controller.insertCharacters(download.getCharacters());
         }
     }
 

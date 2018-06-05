@@ -8,22 +8,20 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.toshiba.rickandmorty.CallBack.RickAndMortyCallBack;
-import com.example.toshiba.rickandmorty.Class.Download;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Download download;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //prueba();
     }
 
-    public void prueba(){
+   /* public void prueba(){
         RickAndMortyCallBack postsCallBack = new RickAndMortyCallBack(this);
-        postsCallBack.start(4);
+        postsCallBack.start(1);
 
         if(postsCallBack.getDownload() != null) {
             NotificationCompat.Builder mBuilder =
@@ -36,5 +34,5 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(1, mBuilder.build());
         }
-    }
+    }*/
 }
