@@ -43,7 +43,7 @@ public class Controller {
 
             for (String episodeAPI : characterAPI.getEpisode()) {
                 Episode episode = new Episode(episodeAPI);
-                Long episodeId = daoSession.insert(episode);
+                Long episodeId = insertOrGetEpisode(episode);
                 JoinCharacterWithEpisodes joinCharacterWithEpisodes =
                         new JoinCharacterWithEpisodes(characterAPI.getId(), episodeId);
                 daoSession.insert(joinCharacterWithEpisodes);
@@ -54,14 +54,32 @@ public class Controller {
     public Long insertOrGetLocation(Location location)
     {
         Long id;
+        Location oldLocation;
         LocationDao locationDao = daoSession.getLocationDao();
 
         try{
-            location = locationDao.queryBuilder().where(LocationDao.Properties.Url.eq(location.getUrl())).unique();
-            id = location.getId();
+            oldLocation = locationDao.queryBuilder().where(LocationDao.Properties.Url.eq(location.getUrl())).unique();
+            id = oldLocation.getId();
         }catch(Exception exc)
         {
             id = daoSession.insert(location);
+        }
+
+        return id;
+    }
+
+    public Long insertOrGetEpisode(Episode episode)
+    {
+        Long id;
+        Episode oldEpisode;
+        EpisodeDao episodeDao = daoSession.getEpisodeDao();
+
+        try{
+            oldEpisode = episodeDao.queryBuilder().where(EpisodeDao.Properties.Url.eq(episode.getUrl())).unique();
+            id = oldEpisode.getEpisodeId();
+        }catch(Exception exc)
+        {
+            id = daoSession.insert(episode);
         }
 
         return id;
