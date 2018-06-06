@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.toshiba.rickandmorty.Class.CharacterAPI;
 import com.example.toshiba.rickandmorty.Database.DaoMaster.DevOpenHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,5 +88,10 @@ public class Controller {
 
     public void closeDB(){
         devOpenHelper.close();
+    }
+
+    public ArrayList<Character> getCharacters() {
+        ArrayList<Character> characters = new ArrayList<>(daoSession.getCharacterDao().loadAll());
+        return characters;
     }
 }
