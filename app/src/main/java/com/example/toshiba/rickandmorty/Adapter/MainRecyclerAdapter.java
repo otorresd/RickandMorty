@@ -1,18 +1,14 @@
 package com.example.toshiba.rickandmorty.Adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.toshiba.rickandmorty.R;
 import com.example.toshiba.rickandmorty.Database.Character;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by toshiba on 6/5/2018.
@@ -41,7 +37,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.locationTextView.setText(String.valueOf(characters.get(position).getLocationId()));
         holder.nameTextView.setText(characters.get(position).getName());
         holder.originTextView.setText(String.valueOf(characters.get(position).getOriginId()));
-        holder.statusTextView.setText(characters.get(position).getStatus());
+        //.load(R.drawable.orig_737410).into(holder.imageView);
+        //holder.statusTextView.setText(characters.get(position).getStatus());
         holder.speciesTextView.setText(characters.get(position).getSpecies());
     }
 

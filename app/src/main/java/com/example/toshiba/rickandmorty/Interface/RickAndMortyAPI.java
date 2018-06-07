@@ -4,9 +4,11 @@ package com.example.toshiba.rickandmorty.Interface;
  */
 import com.example.toshiba.rickandmorty.Class.Download;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface RickAndMortyAPI {
 
@@ -15,4 +17,7 @@ public interface RickAndMortyAPI {
 
     @GET("api/character")
     Call<Download> getPages(@Query("page") Integer page);
+
+    @GET
+    Call<ResponseBody> downloadImageDynamicUrlSync(@Url String fileUrl);
 }

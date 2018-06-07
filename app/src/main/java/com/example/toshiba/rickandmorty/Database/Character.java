@@ -8,6 +8,8 @@ import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
+
+import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.DaoException;
 
@@ -31,7 +33,10 @@ public class Character {
 
     private Long locationId;
 
-    private String image;
+    private Long imageId;
+
+    @ToOne(joinProperty = "imageId")
+    private Image image;
 
     @ToMany
     @JoinEntity(
@@ -54,6 +59,9 @@ public class Character {
     @Generated(hash = 898307126)
     private transient CharacterDao myDao;
 
+    @Generated(hash = 1517498479)
+    private transient Long image__resolvedKey;
+
     /**
      * No args constructor for use in serialization
      *
@@ -61,8 +69,8 @@ public class Character {
     public Character() {
     }
 
-    @Generated(hash = 258489728)
-    public Character(Long id, String name, String status, String species, String type, String gender, Long originId, Long locationId, String image, String url, String created) {
+    @Generated(hash = 764679917)
+    public Character(Long id, String name, String status, String species, String type, String gender, Long originId, Long locationId, Long imageId, String url, String created) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -71,7 +79,7 @@ public class Character {
         this.gender = gender;
         this.originId = originId;
         this.locationId = locationId;
-        this.image = image;
+        this.imageId = imageId;
         this.url = url;
         this.created = created;
     }
@@ -124,12 +132,27 @@ public class Character {
         this.gender = gender;
     }
 
-    public String getImage() {
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1513476086)
+    public Image getImage() {
+        Long __key = this.imageId;
+        if (image__resolvedKey == null || !image__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ImageDao targetDao = daoSession.getImageDao();
+            Image imageNew = targetDao.load(__key);
+            synchronized (this) {
+                image = imageNew;
+                image__resolvedKey = __key;
+            }
+        }
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(Long imageId) {
+        this.imageId = imageId;
     }
 
     public String getUrl() {
@@ -241,6 +264,24 @@ public class Character {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCharacterDao() : null;
+    }
+
+    public Long getImageId() {
+        return this.imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 641415871)
+    public void setImage(Image image) {
+        synchronized (this) {
+            this.image = image;
+            imageId = image == null ? null : image.getId();
+            image__resolvedKey = imageId;
+        }
     }
 
 }

@@ -1,11 +1,13 @@
 package com.example.toshiba.rickandmorty.Database;
 
 import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
@@ -33,7 +35,7 @@ public class CharacterDao extends AbstractDao<Character, Long> {
         public final static Property Gender = new Property(5, String.class, "gender", false, "GENDER");
         public final static Property OriginId = new Property(6, Long.class, "originId", false, "ORIGIN_ID");
         public final static Property LocationId = new Property(7, Long.class, "locationId", false, "LOCATION_ID");
-        public final static Property Image = new Property(8, String.class, "image", false, "IMAGE");
+        public final static Property ImageId = new Property(8, Long.class, "imageId", false, "IMAGE_ID");
         public final static Property Url = new Property(9, String.class, "url", false, "URL");
         public final static Property Created = new Property(10, String.class, "created", false, "CREATED");
     }
@@ -64,7 +66,7 @@ public class CharacterDao extends AbstractDao<Character, Long> {
                 "\"GENDER\" TEXT," + // 5: gender
                 "\"ORIGIN_ID\" INTEGER," + // 6: originId
                 "\"LOCATION_ID\" INTEGER," + // 7: locationId
-                "\"IMAGE\" TEXT," + // 8: image
+                "\"IMAGE_ID\" INTEGER," + // 8: imageId
                 "\"URL\" TEXT UNIQUE ," + // 9: url
                 "\"CREATED\" TEXT);"); // 10: created
     }
@@ -119,9 +121,9 @@ public class CharacterDao extends AbstractDao<Character, Long> {
             stmt.bindLong(8, locationId);
         }
  
-        String image = entity.getImage();
-        if (image != null) {
-            stmt.bindString(9, image);
+        Long imageId = entity.getImageId();
+        if (imageId != null) {
+            stmt.bindLong(9, imageId);
         }
  
         String url = entity.getUrl();
@@ -179,9 +181,9 @@ public class CharacterDao extends AbstractDao<Character, Long> {
             stmt.bindLong(8, locationId);
         }
  
-        String image = entity.getImage();
-        if (image != null) {
-            stmt.bindString(9, image);
+        Long imageId = entity.getImageId();
+        if (imageId != null) {
+            stmt.bindLong(9, imageId);
         }
  
         String url = entity.getUrl();
@@ -217,7 +219,7 @@ public class CharacterDao extends AbstractDao<Character, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // gender
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // originId
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // locationId
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // image
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // imageId
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // url
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // created
         );
@@ -234,7 +236,7 @@ public class CharacterDao extends AbstractDao<Character, Long> {
         entity.setGender(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setOriginId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
         entity.setLocationId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setImage(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setImageId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setUrl(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setCreated(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
@@ -292,4 +294,95 @@ public class CharacterDao extends AbstractDao<Character, Long> {
         return query.list();
     }
 
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getImageDao().getAllColumns());
+            builder.append(" FROM CHARACTER T");
+            builder.append(" LEFT JOIN IMAGE T0 ON T.\"IMAGE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Character loadCurrentDeep(Cursor cursor, boolean lock) {
+        Character entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Image image = loadCurrentOther(daoSession.getImageDao(), cursor, offset);
+        entity.setImage(image);
+
+        return entity;    
+    }
+
+    public Character loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Character> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Character> list = new ArrayList<Character>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Character> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Character> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

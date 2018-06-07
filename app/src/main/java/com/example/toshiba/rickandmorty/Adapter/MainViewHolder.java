@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.toshiba.rickandmorty.R;
 
 /**
@@ -26,7 +27,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
 
         imageView = (ImageView)itemView.findViewById(R.id.characterImageView);
         nameTextView = (TextView)itemView.findViewById(R.id.nameTextView);
-        statusTextView = (TextView)itemView.findViewById(R.id.rstatusTextView);
+        //statusTextView = (TextView)itemView.findViewById(R.id.rstatusTextView);
         speciesTextView = (TextView)itemView.findViewById(R.id.rspeciesTextView);
         genderTextView = (TextView)itemView.findViewById(R.id.rgenderTextView);
         originTextView = (TextView)itemView.findViewById(R.id.roriginTextView);

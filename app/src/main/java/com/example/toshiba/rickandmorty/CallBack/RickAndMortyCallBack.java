@@ -5,8 +5,10 @@ import android.content.Context;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
 
+import com.example.toshiba.rickandmorty.Class.CharacterAPI;
 import com.example.toshiba.rickandmorty.Class.Download;
 import com.example.toshiba.rickandmorty.Database.Controller;
+import com.example.toshiba.rickandmorty.Database.Image;
 import com.example.toshiba.rickandmorty.Interface.RickAndMortyAPI;
 import com.example.toshiba.rickandmorty.R;
 import com.google.gson.Gson;
@@ -36,6 +38,8 @@ public class RickAndMortyCallBack implements Callback<Download> {
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
 
+    RickAndMortyAPI rickAndMortyAPI = retrofit.create(RickAndMortyAPI.class);
+
     public Download getDownload() {
         return download;
     }
@@ -48,15 +52,11 @@ public class RickAndMortyCallBack implements Callback<Download> {
     }
 
     public void start(){
-        RickAndMortyAPI rickAndMortyAPI = retrofit.create(RickAndMortyAPI.class);
-
         Call<Download> call = rickAndMortyAPI.defaultPages();
         call.enqueue(this);
     }
 
     public void start(int page){
-        RickAndMortyAPI rickAndMortyAPI = retrofit.create(RickAndMortyAPI.class);
-
         Call<Download> call = rickAndMortyAPI.getPages(page);
         call.enqueue(this);
     }
@@ -73,7 +73,10 @@ public class RickAndMortyCallBack implements Callback<Download> {
     public void onResponse(Call<Download> call, Response<Download> response) {
         if(response.isSuccessful()) {
             download = response.body();
-            controller.insertCharacters(download.getCharacters());
+            for (CharacterAPI characterAPI : download.getCharacters()) {
+                ImageCallBack imageCallBack = new ImageCallBack(context, characterAPI);
+                imageCallBack.start();
+            }
         }
     }
 
