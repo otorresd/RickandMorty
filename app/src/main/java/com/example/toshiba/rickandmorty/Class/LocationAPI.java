@@ -4,9 +4,6 @@ package com.example.toshiba.rickandmorty.Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-
 public class LocationAPI {
 
     @SerializedName("name")

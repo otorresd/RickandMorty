@@ -1,6 +1,10 @@
 package com.example.toshiba.rickandmorty.Adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +41,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.locationTextView.setText(String.valueOf(characters.get(position).getLocationId()));
         holder.nameTextView.setText(characters.get(position).getName());
         holder.originTextView.setText(String.valueOf(characters.get(position).getOriginId()));
-        //.load(R.drawable.orig_737410).into(holder.imageView);
+
+        byte[] img = characters.get(position).getImage().getImg();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+        holder.imageView.setImageBitmap(bitmap);
         //holder.statusTextView.setText(characters.get(position).getStatus());
         holder.speciesTextView.setText(characters.get(position).getSpecies());
     }
