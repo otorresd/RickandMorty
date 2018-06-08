@@ -31,7 +31,13 @@ public class Character {
 
     private Long originId;
 
+    @ToOne(joinProperty = "originId")
+    private Location origin;
+
     private Long locationId;
+
+    @ToOne(joinProperty = "locationId")
+    private Location location;
 
     private Long imageId;
 
@@ -61,6 +67,12 @@ public class Character {
 
     @Generated(hash = 1517498479)
     private transient Long image__resolvedKey;
+
+    @Generated(hash = 1207152639)
+    private transient Long origin__resolvedKey;
+
+    @Generated(hash = 1068795426)
+    private transient Long location__resolvedKey;
 
     /**
      * No args constructor for use in serialization
@@ -175,16 +187,8 @@ public class Character {
         return this.originId;
     }
 
-    public void setOriginId(long originId) {
-        this.originId = originId;
-    }
-
     public long getLocationId() {
         return this.locationId;
-    }
-
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
     }
 
     public void setOriginId(Long originId) {
@@ -215,6 +219,24 @@ public class Character {
             }
         }
         return episode;
+    }
+
+    public String getStringEpisode(){
+
+        String episodes = "";
+        Episode last = episode.remove(episode.size() - 1);
+        for (Episode epi : episode) {
+            episodes = episodes + episode(epi.getUrl()) + ", ";
+        }
+
+        episodes = episodes + episode(last.getUrl());
+        return episodes;
+    }
+
+    public String episode(String url){
+        String[] number = url.split("/");
+        int length = number.length;
+        return number[length - 1];
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
@@ -283,5 +305,64 @@ public class Character {
             image__resolvedKey = imageId;
         }
     }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1373094969)
+    public Location getOrigin() {
+        Long __key = this.originId;
+        if (origin__resolvedKey == null || !origin__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            LocationDao targetDao = daoSession.getLocationDao();
+            Location originNew = targetDao.load(__key);
+            synchronized (this) {
+                origin = originNew;
+                origin__resolvedKey = __key;
+            }
+        }
+        return origin;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 645191088)
+    public void setOrigin(Location origin) {
+        synchronized (this) {
+            this.origin = origin;
+            originId = origin == null ? null : origin.getId();
+            origin__resolvedKey = originId;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1449045962)
+    public Location getLocation() {
+        Long __key = this.locationId;
+        if (location__resolvedKey == null || !location__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            LocationDao targetDao = daoSession.getLocationDao();
+            Location locationNew = targetDao.load(__key);
+            synchronized (this) {
+                location = locationNew;
+                location__resolvedKey = __key;
+            }
+        }
+        return location;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 340671030)
+    public void setLocation(Location location) {
+        synchronized (this) {
+            this.location = location;
+            locationId = location == null ? null : location.getId();
+            location__resolvedKey = locationId;
+        }
+    }
+
 
 }

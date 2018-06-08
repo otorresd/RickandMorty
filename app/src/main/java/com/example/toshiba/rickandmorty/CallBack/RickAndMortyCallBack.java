@@ -13,6 +13,9 @@ import com.example.toshiba.rickandmorty.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,10 +31,15 @@ public class RickAndMortyCallBack implements Callback<Download> {
 
     private String BASE_URL = "https://www.rickandmortyapi.com/";
     private Context context;
+    private Controller controller;
 
     Gson gson = new GsonBuilder().serializeNulls().create();
 
+    OkHttpClient okHttpClient = new OkHttpClient().newBuilder().connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.SECONDS).build();
+
     Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+                            .client(okHttpClient)
                             .addConverterFactory(ScalarsConverterFactory.create())
                             .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
@@ -44,8 +52,9 @@ public class RickAndMortyCallBack implements Callback<Download> {
 
     private Download download;
 
-    public RickAndMortyCallBack(Context context) {
+    public RickAndMortyCallBack(Context context, Controller controller) {
         this.context = context;
+        this.controller = controller;
     }
 
     public void start(){
@@ -70,10 +79,10 @@ public class RickAndMortyCallBack implements Callback<Download> {
     public void onResponse(Call<Download> call, Response<Download> response) {
         if(response.isSuccessful()) {
             download = response.body();
-            for (CharacterAPI characterAPI : download.getCharacters()) {
-                ImageCallBack imageCallBack = new ImageCallBack(context, characterAPI);
-                imageCallBack.start();
-            }
+            //for (CharacterAPI characterAPI : download.getCharacters()) {
+                ImageCallBack imageCallBack = new ImageCallBack(context, download.getCharacters(), controller);
+                imageCallBack.start(0);
+            //}
         }
     }
 

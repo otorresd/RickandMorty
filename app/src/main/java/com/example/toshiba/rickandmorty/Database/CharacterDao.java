@@ -301,9 +301,15 @@ public class CharacterDao extends AbstractDao<Character, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getImageDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getLocationDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getLocationDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T2", daoSession.getImageDao().getAllColumns());
             builder.append(" FROM CHARACTER T");
-            builder.append(" LEFT JOIN IMAGE T0 ON T.\"IMAGE_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN LOCATION T0 ON T.\"ORIGIN_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN LOCATION T1 ON T.\"LOCATION_ID\"=T1.\"_id\"");
+            builder.append(" LEFT JOIN IMAGE T2 ON T.\"IMAGE_ID\"=T2.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -313,6 +319,14 @@ public class CharacterDao extends AbstractDao<Character, Long> {
     protected Character loadCurrentDeep(Cursor cursor, boolean lock) {
         Character entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
+
+        Location origin = loadCurrentOther(daoSession.getLocationDao(), cursor, offset);
+        entity.setOrigin(origin);
+        offset += daoSession.getLocationDao().getAllColumns().length;
+
+        Location location = loadCurrentOther(daoSession.getLocationDao(), cursor, offset);
+        entity.setLocation(location);
+        offset += daoSession.getLocationDao().getAllColumns().length;
 
         Image image = loadCurrentOther(daoSession.getImageDao(), cursor, offset);
         entity.setImage(image);

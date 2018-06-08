@@ -1,6 +1,7 @@
 package com.example.toshiba.rickandmorty.Database;
 
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
@@ -22,32 +23,27 @@ public class Controller {
    private SQLiteDatabase db;
    private DaoMaster daoMaster;
    private DaoSession daoSession;
-    private Context context;
+   private Context context;
+   private ProgressDialog progressDialog;
 
     public Controller(Context context) {
         this.context = context;
-        devOpenHelper = new DaoMaster.DevOpenHelper(context, "RAM-db", null);
+        devOpenHelper = new DaoMaster.DevOpenHelper(context, "R-db", null);
         db = devOpenHelper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
     }
 
     public void insertCharacter(CharacterAPI characterAPI, Image image){
+
+        if(progressDialog == null)
+            showProgress();
+
         Location location = new Location(characterAPI.getLocation().getName(), characterAPI.getLocation().getUrl());
         Long locationId = insertOrGetLocation(location);
 
         Location origin = new Location(characterAPI.getOrigin().getName(), characterAPI.getOrigin().getUrl());
         Long originId = insertOrGetLocation(origin);
-
-        NotificationCompat.Builder mBuilder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setContentTitle("Insertar Imagen")
-                        .setContentText("marca")
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1, mBuilder.build());
 
         Long imageId = insertOrGetImage(image);
 
@@ -55,15 +51,47 @@ public class Controller {
                 characterAPI.getStatus(),characterAPI.getSpecies(),characterAPI.getType(),
                 characterAPI.getGender(), originId, locationId, imageId,
                 characterAPI.getUrl(), characterAPI.getCreated());
-        daoSession.insert(character);
+        try {
+            daoSession.insert(character);
+        }
+        catch (Exception exc)
+        {
+            NotificationCompat.Builder mBuilder =
+                    (NotificationCompat.Builder) new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setContentTitle("Error en guardar")
+                            .setContentText("Ya existe un personaje con ese id")
+                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(1, mBuilder.build());
+        }
         for (String episodeAPI : characterAPI.getEpisode()) {
             Episode episode = new Episode(episodeAPI);
             Long episodeId = insertOrGetEpisode(episode);
             JoinCharacterWithEpisodes joinCharacterWithEpisodes =
                     new JoinCharacterWithEpisodes(characterAPI.getId(), episodeId);
-            daoSession.insert(joinCharacterWithEpisodes);
+            try{
+                daoSession.insert(joinCharacterWithEpisodes);
+            }
+            catch(Exception ex)
+            {
+                NotificationCompat.Builder mBuilder =
+                        (NotificationCompat.Builder) new NotificationCompat.Builder(context)
+                                .setSmallIcon(R.mipmap.ic_launcher_round)
+                                .setContentTitle("Error en guardar")
+                                .setContentText("En el join")
+                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(1, mBuilder.build());
+            }
+
         }
+
+        progressDialog.incrementProgressBy(1);
+        if(progressDialog.getProgress() == progressDialog.getMax())
+            progressDialog.dismiss();
     }
 
     public Long insertOrGetLocation(Location location)
@@ -124,6 +152,15 @@ public class Controller {
     public ArrayList<Character> getCharacters() {
         ArrayList<Character> characters = new ArrayList<>(daoSession.getCharacterDao().loadAll());
         return characters;
+    }
+
+    public void showProgress(){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Saving characters");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(493);
+        progressDialog.show();
     }
 
 }

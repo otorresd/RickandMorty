@@ -38,15 +38,26 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
         holder.genderTextView.setText(characters.get(position).getGender());
-        holder.locationTextView.setText(String.valueOf(characters.get(position).getLocationId()));
+        holder.locationTextView.setText(String.valueOf(characters.get(position).getLocation().getName()));
         holder.nameTextView.setText(characters.get(position).getName());
-        holder.originTextView.setText(String.valueOf(characters.get(position).getOriginId()));
+        holder.originTextView.setText(String.valueOf(characters.get(position).getOrigin().getName()));
 
         byte[] img = characters.get(position).getImage().getImg();
         Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
         holder.imageView.setImageBitmap(bitmap);
-        //holder.statusTextView.setText(characters.get(position).getStatus());
-        holder.speciesTextView.setText(characters.get(position).getSpecies());
+        holder.statusTextView.setText(characters.get(position).getStatus());
+
+        String type = characters.get(position).getType();
+        String species;
+        if(type.equalsIgnoreCase(""))
+            species = characters.get(position).getSpecies();
+        else
+            species = characters.get(position).getSpecies() + ", " + type;
+
+        holder.speciesTextView.setText(species);
+
+        characters.get(position).getEpisode();
+        /*holder.episodeTextView.setText(episode);*/
     }
 
     /**

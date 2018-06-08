@@ -21,16 +21,18 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     public TextView genderTextView;
     public TextView originTextView;
     public TextView locationTextView;
+    public TextView episodeTextView;
 
     public MainViewHolder(View itemView) {
         super(itemView);
 
         imageView = (ImageView)itemView.findViewById(R.id.characterImageView);
         nameTextView = (TextView)itemView.findViewById(R.id.nameTextView);
-        //statusTextView = (TextView)itemView.findViewById(R.id.rstatusTextView);
+        statusTextView = (TextView)itemView.findViewById(R.id.rstatusTextView);
         speciesTextView = (TextView)itemView.findViewById(R.id.rspeciesTextView);
         genderTextView = (TextView)itemView.findViewById(R.id.rgenderTextView);
         originTextView = (TextView)itemView.findViewById(R.id.roriginTextView);
         locationTextView = (TextView)itemView.findViewById(R.id.rlocationTextView);
+        episodeTextView = (TextView)itemView.findViewById(R.id.repisodeTextView);
     }
 }
