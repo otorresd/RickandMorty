@@ -2,6 +2,7 @@ package com.example.toshiba.rickandmorty.CallBack;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
 
@@ -97,12 +98,18 @@ public class RickAndMortyCallBack implements Callback<Download> {
     public void onFailure(Call<Download> call, Throwable t) {
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.mipmap.ic_circle_rick_and_morty)
                         .setContentTitle("Error durante la descarga")
                         .setContentText(t.getMessage())
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
+
+        SharedPreferences prefs = context.getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("Succefull", false);
+        editor.putInt("cantMax", prefs.getInt("lastCount", 0));
+        editor.commit();
     }
 }

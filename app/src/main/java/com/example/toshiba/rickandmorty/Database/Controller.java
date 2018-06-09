@@ -123,6 +123,7 @@ public class Controller {
             SharedPreferences prefs = context.getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("Succefull", true);
+            editor.putInt("lastCount", prefs.getInt("cantMax", 0));
             editor.commit();
         }
     }
@@ -193,6 +194,7 @@ public class Controller {
         progressDialog.setMessage("Loading...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMax(cantCharacter);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
 

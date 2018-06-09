@@ -34,9 +34,10 @@ public class DialogSyncFragment extends DialogFragment{
         View view = inflater.inflate(R.layout.fragment_dialog_sync, null);
         numberPicker = (NumberPicker)view.findViewById(R.id.numberPicker2);
         int maxValue = 25;
-        if (prefs.getBoolean("Succefull", false)) {
-            maxValue = maxValue - prefs.getInt("cantMax", 0);
-        }
+
+        if(prefs.getInt("lastCount", 0) > 0)
+            maxValue = maxValue - prefs.getInt("lastCount", 0);
+
         numberPicker.setMaxValue(maxValue);
 
         if (maxValue == 0)
@@ -44,7 +45,7 @@ public class DialogSyncFragment extends DialogFragment{
         else
             numberPicker.setMinValue(1);
 
-        builder.setView(view)
+        builder.setView(view).setCancelable(false)
                 .setPositiveButton(R.string.accept_button, new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -69,7 +70,7 @@ public class DialogSyncFragment extends DialogFragment{
 
         prefs = getActivity().getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
         SharedPreferences sharedPreferences =  getActivity().getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
-        int cant = sharedPreferences.getInt("cantMax", 0);
+        int cant = sharedPreferences.getInt("lastCount", 0);
         SharedPreferences.Editor editor = prefs.edit();
 
         int j = 1;

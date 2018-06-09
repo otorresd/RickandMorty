@@ -1,9 +1,11 @@
 package com.example.toshiba.rickandmorty;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,13 +78,18 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.sync_Pages:
-                dialogSyncFragment.show(fragmentManager, "Dialog Fragment");
+                prefs = getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
+                if ( prefs.getBoolean("Succefull", false) && prefs.getInt("cantMax", 0) >= 25)
+                    showDialog();
+                else
+                    dialogSyncFragment.show(fragmentManager, "Dialog Fragment");
                 return true;
             case R.id.delete_DB:
                 prefs = getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("Succefull", false);
                 editor.putInt("cantMax",0);
+                editor.putInt("lastCount",0);
                 editor.commit();
                 deletDB();
                 return true;
@@ -110,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         join.deleteAll();
         image.deleteAll();
 
+
         updateRV(characterDao.loadAll());
     }
 
@@ -120,5 +128,17 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-
+    public void showDialog()
+    {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.MyDialog).setIcon(R.mipmap.ic_circle_rick_and_morty).setTitle("All characters was downloaded")
+                .setMessage("You can not download more characters becouse you are downloaded all of them")
+                .setCancelable(false)
+                .setPositiveButton(R.string.accept_button, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
 }
