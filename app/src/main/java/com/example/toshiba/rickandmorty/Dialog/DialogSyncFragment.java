@@ -50,6 +50,7 @@ public class DialogSyncFragment extends DialogFragment{
 
     public void download(int page){
         Controller controller = new Controller(getActivity());
+        controller.setCantCharacter(page);
         RickAndMortyCallBack postsCallBack = new RickAndMortyCallBack(getActivity(), controller);
         for(int i = 1; i <= page; i++){
             postsCallBack.start(i);

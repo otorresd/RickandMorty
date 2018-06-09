@@ -42,9 +42,8 @@ public class ImageCallBack implements Callback<ResponseBody> {
 
     RickAndMortyAPI rickAndMortyAPI;
 
-    public ImageCallBack(Context context, List<CharacterAPI> list/*CharacterAPI character*/, Controller controller) {
+    public ImageCallBack(Context context, List<CharacterAPI> list, Controller controller) {
         this.context = context;
-        //this.character = character;
         this.controller = controller;
         this.list = list;
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder().connectTimeout(1, TimeUnit.MINUTES)
@@ -92,7 +91,7 @@ public class ImageCallBack implements Callback<ResponseBody> {
                 } catch (Exception exc) {
                     NotificationCompat.Builder mBuilder =
                             (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                                    .setSmallIcon(R.mipmap.ic_circle_rick_and_morty)
                                     .setContentTitle("Error durante la descarga")
                                     .setContentText(list.get(pos).getName())
                                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

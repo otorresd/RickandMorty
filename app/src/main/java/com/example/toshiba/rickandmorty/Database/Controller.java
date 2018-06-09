@@ -26,6 +26,15 @@ public class Controller {
    private Context context;
    private ProgressDialog progressDialog;
 
+    public void setCantCharacter(int cantCharacter) {
+        if (cantCharacter == 25)
+            this.cantCharacter = 493;
+        else
+            this.cantCharacter = cantCharacter * 20;
+    }
+
+    private int cantCharacter;
+
     public Controller(Context context) {
         this.context = context;
         devOpenHelper = new DaoMaster.DevOpenHelper(context, "R-db", null);
@@ -159,7 +168,7 @@ public class Controller {
         progressDialog.setTitle("Saving characters");
         progressDialog.setMessage("Loading...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMax(493);
+        progressDialog.setMax(cantCharacter);
         progressDialog.show();
     }
 
