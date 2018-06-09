@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,8 @@ public class DialogSyncFragment extends DialogFragment{
     }
 
     public void download(int page){
-        Controller controller = new Controller(getActivity());
+        RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+        Controller controller = new Controller(getActivity(), recyclerView);
         controller.setCantCharacter(page);
         RickAndMortyCallBack postsCallBack = new RickAndMortyCallBack(getActivity(), controller);
         for(int i = 1; i <= page; i++){

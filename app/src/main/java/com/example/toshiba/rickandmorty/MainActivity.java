@@ -24,6 +24,7 @@ import com.example.toshiba.rickandmorty.Database.LocationDao;
 import com.example.toshiba.rickandmorty.Dialog.DialogSyncFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void deletDB()
     {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "rick-and-morty-db", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "R-db", null);
         SQLiteDatabase db = helper.getReadableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         DaoSession daoSession = daoMaster.newSession();
@@ -101,6 +102,16 @@ public class MainActivity extends AppCompatActivity {
         locationDao.deleteAll();
         join.deleteAll();
         image.deleteAll();
+
+        updateRV(characterDao.loadAll());
     }
+
+    public void updateRV(List<Character> list){
+        ArrayList<Character> list1 = new ArrayList<>(list);
+        mAdapter = new MainRecyclerAdapter(list1);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
 
 }

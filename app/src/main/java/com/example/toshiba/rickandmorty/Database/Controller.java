@@ -6,7 +6,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.RecyclerView;
 
+import com.example.toshiba.rickandmorty.Adapter.MainRecyclerAdapter;
 import com.example.toshiba.rickandmorty.Class.CharacterAPI;
 import com.example.toshiba.rickandmorty.Database.DaoMaster.DevOpenHelper;
 import com.example.toshiba.rickandmorty.R;
@@ -25,6 +27,7 @@ public class Controller {
    private DaoSession daoSession;
    private Context context;
    private ProgressDialog progressDialog;
+   private RecyclerView recyclerView;
 
     public void setCantCharacter(int cantCharacter) {
         if (cantCharacter == 25)
@@ -41,6 +44,15 @@ public class Controller {
         db = devOpenHelper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
+    }
+
+    public Controller(Context context, RecyclerView recyclerView) {
+        this.context = context;
+        devOpenHelper = new DaoMaster.DevOpenHelper(context, "R-db", null);
+        db = devOpenHelper.getWritableDatabase();
+        daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+        this.recyclerView = recyclerView;
     }
 
     public void insertCharacter(CharacterAPI characterAPI, Image image){
@@ -99,8 +111,12 @@ public class Controller {
         }
 
         progressDialog.incrementProgressBy(1);
-        if(progressDialog.getProgress() == progressDialog.getMax())
+        if(progressDialog.getProgress() == progressDialog.getMax()) {
             progressDialog.dismiss();
+            MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(new ArrayList<>(daoSession.getCharacterDao().loadAll()));
+            recyclerView.setAdapter(mainRecyclerAdapter);
+            mainRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 
     public Long insertOrGetLocation(Location location)
