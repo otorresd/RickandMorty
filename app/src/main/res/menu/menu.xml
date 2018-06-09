@@ -8,9 +8,9 @@
           android:background="@color/colorOrangeText"
           android:textColor="@color/colorOrangeText">
 
-    <item android:id="@+id/new_game"
+    <item android:id="@+id/sync_Pages"
         android:title="Sync Page"/>
-    <item android:id="@+id/help"
+    <item android:id="@+id/delete_DB"
         android:title="Delete DB" />
 
 
