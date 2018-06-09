@@ -21,10 +21,13 @@
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="android:textColorPrimary">@color/colorOrangeText</item>
     </style>
 
     <style name="Widget.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@mipmap/ic_orange_dots_tr</item>
     </style>
+
+
 
 </resources>
