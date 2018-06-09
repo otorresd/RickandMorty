@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
-import android.support.v7.widget.RecyclerView;
 
 import com.example.toshiba.rickandmorty.Class.CharacterAPI;
 import com.example.toshiba.rickandmorty.Database.Controller;
@@ -34,7 +33,6 @@ public class ImageCallBack implements Callback<ResponseBody> {
 
     private String BASE_URL = "https://www.rickandmortyapi.com/";
     private Controller controller;
-    private CharacterAPI character;
     private Context context;
     private List<CharacterAPI> list;
     private int pos;
@@ -115,7 +113,7 @@ public class ImageCallBack implements Callback<ResponseBody> {
 
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.mipmap.ic_circle_rick_and_morty)
                         .setContentTitle("Error durante la descarga")
                         .setContentText(t.getMessage())
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

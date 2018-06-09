@@ -1,14 +1,17 @@
 package com.example.toshiba.rickandmorty.Adapter;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.toshiba.rickandmorty.Database.Episode;
 import com.example.toshiba.rickandmorty.R;
 import com.example.toshiba.rickandmorty.Database.Character;
 
@@ -36,7 +39,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
 
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, int position) {
+    public void onBindViewHolder(MainViewHolder holder, final int position) {
         holder.genderTextView.setText(characters.get(position).getGender());
         holder.locationTextView.setText(String.valueOf(characters.get(position).getLocation().getName()));
         holder.nameTextView.setText(characters.get(position).getName());
@@ -48,7 +51,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.statusTextView.setText(characters.get(position).getStatus());
 
         String type = characters.get(position).getType();
-        String species;
+        final String species;
         if(type.equalsIgnoreCase(""))
             species = characters.get(position).getSpecies();
         else
@@ -57,8 +60,38 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.speciesTextView.setText(species);
 
         characters.get(position).getEpisode();
-        /*holder.episodeTextView.setText(episode);*/
+
+        holder.episodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Episode> episodes = new ArrayList<Episode>(characters.get(position).getEpisode());
+                Episode firstEpisode = episodes.remove(episodes.size() - 1);
+                String striEpisode = "";
+                String[] split;
+                for (Episode episode : episodes) {
+                    split = episode.getUrl().split("/");
+                    striEpisode = striEpisode + split[split.length - 1] + ", ";
+                }
+                split = firstEpisode.getUrl().split("/");
+
+                striEpisode = striEpisode + split[split.length - 1];
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext(), R.style.MyDialog).
+                        setIcon(R.mipmap.ic_circle_rick_and_morty).
+                        setTitle("Episodes in which "+ characters.get(position).getName() +" appears")
+                        .setMessage(striEpisode)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.accept_button, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
     }
+
 
     /**
      * Returns the total number of items in the data set held by the adapter.

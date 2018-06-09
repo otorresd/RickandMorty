@@ -11,6 +11,7 @@
     <style name="MyDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/colorOrangeText</item>
+        <item name="android:textColorPrimary">@color/colorOrangeText</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="colorAccent">@color/colorOrangeText</item>
     </style>

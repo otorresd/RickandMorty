@@ -2,6 +2,7 @@ package com.example.toshiba.rickandmorty.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     public TextView genderTextView;
     public TextView originTextView;
     public TextView locationTextView;
-    public TextView episodeTextView;
+    public Button episodeButton;
 
     public MainViewHolder(View itemView) {
         super(itemView);
@@ -33,6 +34,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         genderTextView = (TextView)itemView.findViewById(R.id.rgenderTextView);
         originTextView = (TextView)itemView.findViewById(R.id.roriginTextView);
         locationTextView = (TextView)itemView.findViewById(R.id.rlocationTextView);
-        episodeTextView = (TextView)itemView.findViewById(R.id.repisodeTextView);
+        episodeButton = (Button)itemView.findViewById(R.id.episodeButton);
+
     }
 }
