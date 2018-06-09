@@ -3,6 +3,7 @@ package com.example.toshiba.rickandmorty.Database;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
@@ -28,6 +29,7 @@ public class Controller {
    private Context context;
    private ProgressDialog progressDialog;
    private RecyclerView recyclerView;
+   private SharedPreferences prefs;
 
     public void setCantCharacter(int cantCharacter) {
         if (cantCharacter == 25)
@@ -44,6 +46,7 @@ public class Controller {
         db = devOpenHelper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
+        prefs = context.getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
     }
 
     public Controller(Context context, RecyclerView recyclerView) {
@@ -53,6 +56,7 @@ public class Controller {
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
         this.recyclerView = recyclerView;
+        prefs = context.getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
     }
 
     public void insertCharacter(CharacterAPI characterAPI, Image image){
@@ -79,7 +83,7 @@ public class Controller {
         {
             NotificationCompat.Builder mBuilder =
                     (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setSmallIcon(R.mipmap.ic_circle_rick_and_morty)
                             .setContentTitle("Error en guardar")
                             .setContentText("Ya existe un personaje con ese id")
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -99,7 +103,7 @@ public class Controller {
             {
                 NotificationCompat.Builder mBuilder =
                         (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-                                .setSmallIcon(R.mipmap.ic_launcher_round)
+                                .setSmallIcon(R.mipmap.ic_circle_rick_and_morty)
                                 .setContentTitle("Error en guardar")
                                 .setContentText("En el join")
                                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
@@ -116,6 +120,10 @@ public class Controller {
             MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(new ArrayList<>(daoSession.getCharacterDao().loadAll()));
             recyclerView.setAdapter(mainRecyclerAdapter);
             mainRecyclerAdapter.notifyDataSetChanged();
+            SharedPreferences prefs = context.getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("Succefull", true);
+            editor.commit();
         }
     }
 

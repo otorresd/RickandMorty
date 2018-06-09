@@ -1,5 +1,7 @@
 package com.example.toshiba.rickandmorty;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private MainRecyclerAdapter mAdapter;
     private DialogSyncFragment dialogSyncFragment;
     private FragmentManager fragmentManager;
-
+    private SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
                 dialogSyncFragment.show(fragmentManager, "Dialog Fragment");
                 return true;
             case R.id.delete_DB:
+                prefs = getSharedPreferences("Rick And Morty", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("Succefull", false);
+                editor.putInt("cantMax",0);
+                editor.commit();
                 deletDB();
                 return true;
             default:
